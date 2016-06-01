@@ -7,4 +7,4 @@ usually in `<pkgdir>/docs/src` and the docstrings that are loaded by loading the
 to the final output (which at this point is just a set of markdown files that can be parsed further
 with `mkdocs`).
 
-It works by constructing a `Documents.Document` by using the `Documenter.Builder.*` types and methods.
+It works by constructing a [`Documents.Document`](@ref) by using the [`Documenter.Builder.*`](@ref) types and methods.
