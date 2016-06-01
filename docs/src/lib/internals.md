@@ -45,6 +45,11 @@ Builder.ContentsBlocks
 Builder.CrossReferences
 Builder.CheckDocument
 Builder.RenderDocument
+Builder.Pipeline
+Builder.DEFAULT_PIPELINE
+Builder.process
+Builder.log
+Builder.exec
 ```
 
 ## CrossReferences

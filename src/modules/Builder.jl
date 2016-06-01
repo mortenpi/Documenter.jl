@@ -161,11 +161,21 @@ immutable RenderDocument end
 # Pipeline.
 # ---------
 
+"""
+A `Pipeline` is a sequence of actions (each represented by an object of type `T`)
+that must have the following interface
+
+ - [`exec(::T, doc::Document)`](@ref Builder.exec)
+ - [`log(::T)`](@ref Builder.exec)
+"""
 immutable Pipeline{T}
     pipeline :: T
 end
 Pipeline(p...) = Pipeline{typeof(p)}(p)
 
+"""
+The default [`Pipeline`](@ref Builder.Pipeline) instance used by [`makedocs`](@ref).
+"""
 const DEFAULT_PIPELINE = Pipeline(
     SetupBuildDirectory(),
     CopyAssetsDirectory(),
@@ -187,7 +197,9 @@ const DEFAULT_PIPELINE = Pipeline(
 
 # Processing.
 # -----------
-
+"""
+    process(p::Pipeline, document)
+"""
 process(p::Pipeline, document) = process(p.pipeline, document)
 
 function process(pipeline::Tuple, document)
@@ -207,8 +219,14 @@ process(::Tuple{}, document) = nothing
 
 # Interface.
 # ----------
-
+"""
+    log(::T)
+"""
 function log  end
+
+"""
+    exec(::T, doc::Document)
+"""
 function exec end
 
 # Implementations.
