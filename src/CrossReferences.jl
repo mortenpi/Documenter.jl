@@ -115,11 +115,49 @@ end
 function docsxref(link::Markdown.Link, meta, page, doc)
     # Parse the link text and find current module.
     local code = link.text[1].code
-    local ex = parse(code)
+    local ex = try
+        parse(code)
+    catch err
+        warn(err)
+        Utilities.log2file2() do io
+            println(io, err)
+            println(io, " > meta: $(meta)")
+            println(io, " > link: $(link.text)")
+            println(io, " > link-url: $(link.url)")
+            println(io, " > page: $(page.build)")
+        end
+        return
+    end
     local mod = get(meta, :CurrentModule, current_module())
     # Find binding and type signature associated with the link.
-    local binding = Documenter.DocSystem.binding(mod, ex)
-    local typesig = eval(mod, Documenter.DocSystem.signature(ex, rstrip(code)))
+    local binding = try
+        Documenter.DocSystem.binding(mod, ex)
+    catch err
+        warn(err)
+        Utilities.log2file2() do io
+            println(io, err)
+            println(io, " > module: $(mod)")
+            println(io, " > expr: $(ex)")
+            println(io, " > link: $(link.text)")
+            println(io, " > link-url: $(link.url)")
+            println(io, " > page: $(page.build)")
+        end
+        return
+    end
+    local typesig = try
+        eval(mod, Documenter.DocSystem.signature(ex, rstrip(code)))
+    catch err
+        warn(e)
+        Utilities.log2file2() do io
+            println(io, err)
+            println(io, " > expr: $(ex)")
+            println(io, " > code: $(code)")
+            println(io, " > link: $(link.text)")
+            println(io, " > link-url: $(link.url)")
+            println(io, " > page: $(page.build)")
+        end
+        return
+    end
     # Try to find a valid object that we can cross-reference.
     local nullobject = find_object(doc, binding, typesig)
     if !isnull(nullobject)

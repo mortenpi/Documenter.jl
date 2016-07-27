@@ -190,7 +190,12 @@ function checkresult(result::Result)
         startswith(str, head) || report(result, str)
     else
         value = result.hide ? nothing : result.value # `;` hides output.
-        str   = result_to_string(result.stdout, value)
+        str = try
+            result_to_string(result.stdout, value)
+        catch err
+            warn(err)
+            "<ERROR>"
+        end
         strip(str) == strip(sanitise(IOBuffer(result.output))) || report(result, str)
     end
 end

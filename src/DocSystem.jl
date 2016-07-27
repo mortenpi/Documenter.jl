@@ -73,6 +73,7 @@ end
 binding(m::Module, x::Expr) =
     Meta.isexpr(x, :.) ? binding(getmod(m, x.args[1]), x.args[2].value) :
     Meta.isexpr(x, [:call, :macrocall, :curly]) ? binding(m, x.args[1]) :
+    Meta.isexpr(x, :ccall) ? binding(Base, :ccall) :
         error("`binding` cannot understand expression `$x`.")
 
 # Helper methods for the above `binding` method.
@@ -86,6 +87,7 @@ binding(m::Module, λ::Any) = binding(λ)
 ## Signatures. ##
 
 function signature(x, str::AbstractString)
+    Meta.isexpr(x, :ccall) && return :(Union{Tuple{}}) # hack around ccall() bug in Base.Docs.signature()
     ts = Base.Docs.signature(x)
     (Meta.isexpr(x, :macrocall, 1) && !endswith(strip(str), "()")) ? :(Union{}) : ts
 end

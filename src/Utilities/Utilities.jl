@@ -475,4 +475,14 @@ end
 
 include("DOM.jl")
 
+# ...
+function log2file2(f, file)
+    io = IOBuffer()
+    f(io)
+    s = takebuf_string(io)
+    println(s)
+    open(io -> println(io, s), file, "a")
+end
+log2file2(f) = log2file2(f, "errors.log")
+
 end
