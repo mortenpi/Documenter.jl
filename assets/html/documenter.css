@@ -4,8 +4,13 @@
  *
  * License: MIT
  */
-@import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
-@import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css");
+
+/* We also load the following CDN-hosten stylesheets:
+ *   - https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css
+ *   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css
+ * However, in order for the HTML page to load even if the CDNs are not reachable, we load
+ * these stylesheets at the end of the HTML page via <link> tags.
+ */
 
 @import url("style.css");
 

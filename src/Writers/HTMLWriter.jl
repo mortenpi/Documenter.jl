@@ -63,6 +63,26 @@ using ...Utilities.MDFlatten
 const requirejs_cdn = "https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"
 
 """
+`cdn_stylesheets` is a list of URLs to stylesheets that should be loaded to complete
+the default Documenter CSS style. They will be placed at the end of the `<body>` element
+as `<link>` elements.
+
+We do this (instead of having them as `@import`s in the CSS files) so that if the CDN
+servers are for some reason unreachable, the page would still load and not be blocked
+by the stylesheet.
+
+If new stylesheets get added, the references in `assets/html/documenter.css` or
+`assets/html/style.css` should also be updated.
+"""
+const cdn_stylesheets = [
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"
+    "https://fonts.googleapis.com/css?family=Lato"
+    "https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css"
+    "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/default.min.css"
+    "https://fontlibrary.org/face/fantasque-sans-mono"
+]
+
+"""
 [`HTMLWriter`](@ref)-specific globals that are passed to [`domify`](@ref) and
 other recursive functions.
 """
@@ -106,7 +126,7 @@ function render(::Writer{Formats.HTML}, doc::Documents.Document)
     ctx.user_scripts = user_scripts(doc)
 
     for navnode in doc.internal.navlist
-        render_page(ctx, navnode)
+        render_navnode(ctx, navnode)
     end
 
     render_search(ctx)
@@ -169,27 +189,45 @@ end
 """
 Constructs and writes the page referred to by the `navnode` to `.build`.
 """
-function render_page(ctx, navnode)
-    @tags html body
+function render_page(ctx, navnode, dst, article, additional_scripts)
+    @tags html body script link
 
-    page = getpage(ctx, navnode)
-
-    head = render_head(ctx, navnode, ctx.user_scripts)
-    navmenu = render_navmenu(ctx, navnode)
-    article = render_article(ctx, navnode)
+    src = get(navnode.page)
 
     htmldoc = DOM.HTMLDocument(
         html[:lang=>"en"](
-            head,
-            body(navmenu, article)
+            render_head(ctx, navnode),
+            body(
+                render_navmenu(ctx, navnode),
+                article,
+                script[
+                    :src => requirejs_cdn,
+                    Symbol("data-main") => relhref(src, ctx.documenter_js)
+                ],
+                map(vcat(ctx.user_scripts, additional_scripts)) do s
+                    script[:src => relhref(src, s)]
+                end,
+                map(cdn_stylesheets) do s
+                    link[:type => "text/css", :rel => "stylesheet", :href => s]
+                end
+            )
         )
     )
-    open(Formats.extension(Formats.HTML, page.build), "w") do io
+
+    open(Formats.extension(Formats.HTML, dst), "w") do io
         print(io, htmldoc)
     end
 end
 
-function render_head(ctx, navnode, additional_scripts)
+"""
+Constructs and writes the page referred to by the `navnode` to `.build`.
+"""
+function render_navnode(ctx, navnode)
+    page = getpage(ctx, navnode)
+    render_page(ctx, navnode, page.build, render_article(ctx, navnode), [])
+end
+
+function render_head(ctx, navnode)
     @tags head meta link script title
     src = get(navnode.page)
     page_title = "$(mdflatten(pagetitle(ctx, navnode))) · $(ctx.doc.user.sitename) documentation"
@@ -197,21 +235,12 @@ function render_head(ctx, navnode, additional_scripts)
         meta[:charset=>"UTF-8"],
         meta[:name => "viewport", :content => "width=device-width, initial-scale=1.0"],
         title(page_title),
-
         link[
             :href => relhref(src, ctx.documenter_css),
             :rel => "stylesheet",
             :type => "text/css"
         ],
-
-        script("documenterBaseURL=\"$(relhref(src, "."))\""),
-        script[
-            :src => requirejs_cdn,
-            Symbol("data-main") => relhref(src, ctx.documenter_js)
-        ],
-        map(additional_scripts) do s
-            script[:src => relhref(src, s)]
-        end
+        script("documenterBaseURL=\"$(relhref(src, "."))\"")
     )
 end
 
@@ -222,9 +251,6 @@ function render_search(ctx)
     @tags article body h1 header hr html li nav p span ul
     navnode = Documents.NavNode("search", "Search", nothing)
 
-    additional_scripts = vcat([ctx.search_js, ctx.search_index_js], ctx.user_scripts)
-    head = render_head(ctx, navnode, additional_scripts)
-    navmenu = render_navmenu(ctx, navnode)
     article = article(
         header(
             nav(ul(li("Search"))),
@@ -235,15 +261,7 @@ function render_search(ctx)
         ul["#search-results"]
     )
 
-    htmldoc = DOM.HTMLDocument(
-        html[:lang=>"en"](
-            head,
-            body(navmenu, article)
-        )
-    )
-    open(Formats.extension(Formats.HTML, joinpath(ctx.doc.user.build, "search")), "w") do io
-        print(io, htmldoc)
-    end
+    render_page(ctx, navnode, joinpath(ctx.doc.user.build, "search"), article, [ctx.search_js, ctx.search_index_js])
 end
 
 # Navigation menu
