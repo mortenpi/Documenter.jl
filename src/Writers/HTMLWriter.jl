@@ -94,6 +94,7 @@ function render(::Writer{Formats.HTML}, doc::Documents.Document)
 
     ctx.documenter_css = copy_asset("documenter.css", doc)
     copy_asset("style.css", doc)
+    copy_asset("fonts", doc)
 
     let logo = joinpath("assets", "logo.png")
         if isfile(joinpath(doc.user.build, logo))
@@ -126,7 +127,7 @@ function copy_asset(file, doc)
     src = joinpath(Utilities.assetsdir(), "html", file)
     alt_src = joinpath(doc.user.source, "assets", file)
     dst = joinpath(doc.user.build, "assets", file)
-    isfile(src) || error("Asset '$file' not found at $(abspath(src))")
+    ispath(src) || error("Asset '$file' not found at $(abspath(src))")
 
     # Since user's alternative assets are already copied over in a previous build
     # step and they should override documenter's original assets, we only actually
