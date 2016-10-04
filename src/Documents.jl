@@ -157,10 +157,11 @@ type NavNode
     title_override :: Nullable{Compat.String}
     parent         :: Nullable{NavNode}
     children       :: Vector{NavNode}
+    hide_children  :: Bool
     prev           :: Nullable{NavNode}
     next           :: Nullable{NavNode}
 end
-NavNode(page, title_override, parent) = NavNode(page, title_override, parent, [], nothing, nothing)
+NavNode(page, title_override, parent) = NavNode(page, title_override, parent, [], false, nothing, nothing)
 
 """
 Constructs a list of the ancestors of the `navnode` (inclding the `navnode` itself),

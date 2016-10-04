@@ -286,6 +286,8 @@ navitem(ctx, current, nns::Vector) = DOM.Tag(:ul)(map(nn -> navitem(ctx, current
 function navitem(ctx, current, nn::Documents.NavNode)
     @tags ul li span a
 
+    iscurrent = (nn === current) || (nn.hide_children && current in nn.children)
+
     # construct this item
     title = mdconvert(pagetitle(ctx, nn))
     link = if isnull(nn.page)
@@ -293,11 +295,11 @@ function navitem(ctx, current, nn::Documents.NavNode)
     else
         a[".toctext", :href => navhref(nn, current)](title)
     end
-    item = (nn === current) ? li[".current"](link) : li(link)
+    item = iscurrent ? li[".current"](link) : li(link)
 
     # add the subsections (2nd level headings) from the page
-    if nn === current && !isnull(nn.page)
-        subs = collect_subsections(ctx.doc.internal.pages[get(nn.page)])
+    if iscurrent && !isnull(current.page)
+        subs = collect_subsections(ctx.doc.internal.pages[get(current.page)])
         internal_links = map(subs) do _
             istoplevel, anchor, text = _
             _li = istoplevel ? li[".toplevel"] : li[]
@@ -307,7 +309,7 @@ function navitem(ctx, current, nn::Documents.NavNode)
     end
 
     # add the subsections, if any, as a single list
-    if !isempty(nn.children)
+    if !isempty(nn.children) && !nn.hide_children
         push!(item.nodes, navitem(ctx, current, nn.children))
     end
 

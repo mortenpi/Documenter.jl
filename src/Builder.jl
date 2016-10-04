@@ -13,6 +13,7 @@ import ..Documenter:
     Documents,
     Documenter,
     Utilities
+import ..Documenter: Hidden
 
 using Compat, DocStringExtensions
 
@@ -153,7 +154,7 @@ function walk_navpages(title::Compat.String, children::Vector, parent, doc)
     nn.children = walk_navpages(children, nn, doc)
     nn
 end
-function walk_navpages(title::Compat.String, page::Compat.String, parent, doc)
+function walk_navpages(title::Compat.String, page, parent, doc)
     nn = walk_navpages(page, parent, doc)
     nn.title_override = title
     nn
@@ -163,6 +164,15 @@ function walk_navpages(src::Compat.String, parent, doc)
     src in keys(doc.internal.pages) || error("'$src' is not an existing page!")
     nn = Documents.NavNode(src, nothing, parent)
     push!(doc.internal.navlist, nn)
+    nn
+end
+function walk_navpages(hps::Hidden, parent, doc)
+    src = normpath(hps.page)
+    src in keys(doc.internal.pages) || error("'$src' is not an existing page!")
+    nn = Documents.NavNode(src, nothing, parent)
+    push!(doc.internal.navlist, nn)
+    nn.hide_children = true
+    nn.children = walk_navpages(hps.hidden_pages, nn, doc)
     nn
 end
 
