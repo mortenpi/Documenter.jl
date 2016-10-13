@@ -85,11 +85,11 @@ using Documenter
 const examples_root = dirname(@__FILE__)
 
 info("Building mock package docs: MarkdownWriter")
-#=examples_markdown_doc = makedocs(
+examples_markdown_doc = makedocs(
     debug = true,
     root  = examples_root,
     build = "builds/markdown",
-)=#
+)
 
 info("Building mock package docs: HTMLWriter")
 examples_html_doc = makedocs(
