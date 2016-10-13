@@ -282,7 +282,10 @@ end
 It gets called recursively to construct the whole tree.
 """
 navitem(ctx, current) = navitem(ctx, current, ctx.doc.internal.navtree)
-navitem(ctx, current, nns::Vector) = DOM.Tag(:ul)([navitem(ctx, current, nn) for nn in nns if nn.visible])
+function navitem(ctx, current, nns::Vector)
+    visibles = filter(nn -> nn.visible, nns)
+    isempty(visibles) ? DOM.Node("") : DOM.Tag(:ul)(map(nn -> navitem(ctx, current, nn), visibles))
+end
 function navitem(ctx, current, nn::Documents.NavNode)
     @tags ul li span a
 
@@ -309,10 +312,7 @@ function navitem(ctx, current, nn::Documents.NavNode)
     end
 
     # add the visible subsections, if any, as a single list
-    children = filter(c -> c.visible, nn.children)
-    if !isempty(children)
-        push!(item.nodes, navitem(ctx, current, children))
-    end
+    push!(item.nodes, navitem(ctx, current, nn.children))
 
     item
 end
