@@ -85,11 +85,11 @@ using Documenter
 const examples_root = dirname(@__FILE__)
 
 info("Building mock package docs: MarkdownWriter")
-examples_markdown_doc = makedocs(
+#=examples_markdown_doc = makedocs(
     debug = true,
     root  = examples_root,
     build = "builds/markdown",
-)
+)=#
 
 info("Building mock package docs: HTMLWriter")
 examples_html_doc = makedocs(
@@ -103,9 +103,15 @@ examples_html_doc = makedocs(
         "Manual" => [
             "man/tutorial.md",
         ],
+        hide("hidden.md"),
         "Library" => [
             "lib/functions.md",
             "lib/autodocs.md",
-        ]
+        ],
+        hide("Hidden Pages" => "hidden/index.md", [
+            "Page X" => "hidden/x.md",
+            "hidden/y.md",
+            "hidden/z.md",
+        ])
     ]
 )

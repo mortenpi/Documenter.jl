@@ -13,7 +13,6 @@ import ..Documenter:
     Documents,
     Documenter,
     Utilities
-import ..Documenter: Hidden
 
 using Compat, DocStringExtensions
 
@@ -166,13 +165,22 @@ function walk_navpages(src::Compat.String, parent, doc)
     push!(doc.internal.navlist, nn)
     nn
 end
-function walk_navpages(hps::Hidden, parent, doc)
-    src = normpath(hps.page)
+
+function walk_navpages(hps::Tuple, parent, doc)
+    info("Calling walk_navpages(::$(typeof(hps)), ::$(typeof(parent)), ::$(typeof(doc))))")
+    @assert length(hps) == 4
+    walk_navpages(hps..., parent, doc)
+end
+
+function walk_navpages(visible, title, src, children, parent, doc)
+    # parent can also be Void (for level elements)
+    parent_visible = (parent === nothing) || parent.visible
+    src = normpath(src)
     src in keys(doc.internal.pages) || error("'$src' is not an existing page!")
-    nn = Documents.NavNode(src, nothing, parent)
+    nn = Documents.NavNode(src, title, parent)
     push!(doc.internal.navlist, nn)
-    nn.hide_children = true
-    nn.children = walk_navpages(hps.hidden_pages, nn, doc)
+    nn.visible = parent_visible && visible
+    nn.children = walk_navpages(children, nn, doc)
     nn
 end
 

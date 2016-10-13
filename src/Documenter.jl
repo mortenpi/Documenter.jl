@@ -18,35 +18,6 @@ module Documenter
 
 using Compat, DocStringExtensions
 
-"""
-    Hidden(page, hidden_pages)
-
-Allows a subsection of pages to be hidden from the navigation menu. `page` will be linked
-to in the navigation menu, with the title determined as usual. `hidden_pages` should be a
-flat vector of `String`s and `Pair`s, specifying the list of pages that get built, but are
-not displayed in the navigation menu. Note that `hidden_pages` **should not** be
-hierarchical.
-
-# Usage
-
-```julia
-makedocs(
-    ...,
-    pages = [
-        ...,
-        "Hidden section" => Hidden("hidden_index.md", [
-            "hidden1.md",
-            "Hidden 2" => "hidden2.md"
-        ])
-    ]
-)
-```
-"""
-immutable Hidden
-    page :: Compat.String
-    hidden_pages :: Vector{Any}
-end
-
 #
 # Submodules
 #
@@ -81,7 +52,7 @@ end
 # User Interface.
 # ---------------
 
-export Deps, makedocs, deploydocs, Hidden
+export Deps, makedocs, deploydocs, hide
 
 """
     makedocs(
@@ -190,6 +161,55 @@ function makedocs(; debug = false, args...)
     end
     debug ? document : nothing
 end
+
+"""
+$(SIGNATURES)
+
+Allows a subsection of page to be hidden in the navigation menu.
+
+# Usage
+
+```julia
+makedocs(
+    ...,
+    pages = [
+        ...,
+        hide("page.md"),
+        hide("Title" => "page.md")
+    ]
+)
+```
+"""
+hide(page::Pair) = (false, page.first, page.second, [])
+hide(page::AbstractString) = (false, nothing, page, [])
+
+"""
+$(SIGNATURES)
+
+Allows a subsection of pages to be hidden from the navigation menu. `page` will be linked
+to in the navigation menu, with the title determined as usual. `hidden_pages` should be a
+flat vector of `String`s and `Pair`s, specifying the list of pages that get built, but are
+not displayed in the navigation menu. Note that `hidden_pages` **should not** be
+hierarchical.
+
+# Usage
+
+```julia
+makedocs(
+    ...,
+    pages = [
+        ...,
+        hide("Hidden section" => "hidden_index.md", [
+            "hidden1.md",
+            "Hidden 2" => "hidden2.md"
+        ]),
+        hide("hidden_index.md", [...])
+    ]
+)
+```
+"""
+hide(root::Pair, children) = (true, root.first, root.second, map(hide, children))
+hide(root::AbstractString, children) = (true, nothing, root, map(hide, children))
 
 """
     deploydocs(

@@ -282,11 +282,11 @@ end
 It gets called recursively to construct the whole tree.
 """
 navitem(ctx, current) = navitem(ctx, current, ctx.doc.internal.navtree)
-navitem(ctx, current, nns::Vector) = DOM.Tag(:ul)(map(nn -> navitem(ctx, current, nn), nns))
+navitem(ctx, current, nns::Vector) = DOM.Tag(:ul)([navitem(ctx, current, nn) for nn in nns if nn.visible])
 function navitem(ctx, current, nn::Documents.NavNode)
     @tags ul li span a
 
-    iscurrent = (nn === current) || (nn.hide_children && current in nn.children)
+    iscurrent = (nn === current) || any(child -> !child.visible && isdescendant(child, current), nn.children)
 
     # construct this item
     title = mdconvert(pagetitle(ctx, nn))
@@ -308,14 +308,16 @@ function navitem(ctx, current, nn::Documents.NavNode)
         push!(item.nodes, ul[".internal"](internal_links))
     end
 
-    # add the subsections, if any, as a single list
-    if !isempty(nn.children) && !nn.hide_children
-        push!(item.nodes, navitem(ctx, current, nn.children))
+    # add the visible subsections, if any, as a single list
+    children = filter(c -> c.visible, nn.children)
+    if !isempty(children)
+        push!(item.nodes, navitem(ctx, current, children))
     end
 
     item
 end
 
+isdescendant(root, navnode) = (navnode === root) || any(nn -> isdescendant(nn, navnode), root.children)
 
 # Article (page contents)
 # ------------------------------------------------------------------------------
