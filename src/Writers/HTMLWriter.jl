@@ -280,16 +280,26 @@ end
 """
 [`navitem`](@ref) returns the lists and list items of the navigation menu.
 It gets called recursively to construct the whole tree.
+
+It always returns a [`DOM.Node`](@ref). If there's nothing to display (e.g. the node is set
+to be invisible), it returns an empty text node (`DOM.Node("")`).
 """
 navitem(ctx, current) = navitem(ctx, current, ctx.doc.internal.navtree)
 function navitem(ctx, current, nns::Vector)
-    visibles = filter(nn -> nn.visible, nns)
-    isempty(visibles) ? DOM.Node("") : DOM.Tag(:ul)(map(nn -> navitem(ctx, current, nn), visibles))
+    nodes = map(nn -> navitem(ctx, current, nn), nns)
+    filter!(node -> node.name !== DOM.TEXT, nodes)
+    isempty(nodes) ? DOM.Node("") : DOM.Tag(:ul)(nodes)
 end
 function navitem(ctx, current, nn::Documents.NavNode)
     @tags ul li span a
 
-    iscurrent = (nn === current) || any(child -> !child.visible && isdescendant(child, current), nn.children)
+    # We'll do the children first, primarily to determine if this node has any that are
+    # visible. If it does not and it itself is not visible (including current), then
+    # we'll hide this one as well, returning an empty string Node.
+    children = navitem(ctx, current, nn.children)
+    if nn !== current && !nn.visible && children.name === DOM.TEXT
+        return DOM.Node("")
+    end
 
     # construct this item
     title = mdconvert(pagetitle(ctx, nn))
@@ -298,10 +308,10 @@ function navitem(ctx, current, nn::Documents.NavNode)
     else
         a[".toctext", :href => navhref(nn, current)](title)
     end
-    item = iscurrent ? li[".current"](link) : li(link)
+    item = (nn === current) ? li[".current"](link) : li(link)
 
     # add the subsections (2nd level headings) from the page
-    if iscurrent && !isnull(current.page)
+    if (nn === current) && !isnull(current.page)
         subs = collect_subsections(ctx.doc.internal.pages[get(current.page)])
         internal_links = map(subs) do _
             istoplevel, anchor, text = _
@@ -312,12 +322,11 @@ function navitem(ctx, current, nn::Documents.NavNode)
     end
 
     # add the visible subsections, if any, as a single list
-    push!(item.nodes, navitem(ctx, current, nn.children))
+    (children.name === DOM.TEXT) || push!(item.nodes, children)
 
     item
 end
 
-isdescendant(root, navnode) = (navnode === root) || any(nn -> isdescendant(nn, navnode), root.children)
 
 # Article (page contents)
 # ------------------------------------------------------------------------------
