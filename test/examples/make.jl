@@ -108,7 +108,7 @@ examples_html_doc = makedocs(
             "lib/functions.md",
             "lib/autodocs.md",
         ],
-        hide("Hidden Pages" => "hidden/index.md", [
+        hide("Hidden Pages" => "hidden/index.md", Any[
             "Page X" => "hidden/x.md",
             "hidden/y.md",
             "hidden/z.md",
