@@ -165,7 +165,10 @@ end
 """
 $(SIGNATURES)
 
-Allows a subsection of page to be hidden in the navigation menu.
+Allows a page to be hidden in the navigation menu. It will only show up if it happens to be
+the current page. The hidden page will still be present in the linear page list that can be
+accessed via the previous and next page links. The title of the hidden page can be overriden
+using the `=>` operator as usual.
 
 # Usage
 
@@ -174,8 +177,8 @@ makedocs(
     ...,
     pages = [
         ...,
-        hide("page.md"),
-        hide("Title" => "page.md")
+        hide("page1.md"),
+        hide("Title" => "page2.md")
     ]
 )
 ```
@@ -186,11 +189,9 @@ hide(page::AbstractString) = (false, nothing, page, [])
 """
 $(SIGNATURES)
 
-Allows a subsection of pages to be hidden from the navigation menu. `page` will be linked
-to in the navigation menu, with the title determined as usual. `hidden_pages` should be a
-flat vector of `String`s and `Pair`s, specifying the list of pages that get built, but are
-not displayed in the navigation menu. Note that `hidden_pages` **should not** be
-hierarchical.
+Allows a subsection of pages to be hidden from the navigation menu. `root` will be linked
+to in the navigation menu, with the title determined as usual. `children` should be a list
+of pages (note that it **can not** be hierarchical).
 
 # Usage
 
