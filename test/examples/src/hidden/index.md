@@ -1,12 +1,8 @@
 # Hidden pages
 
-Pages can be hidden with the [`hide`](@ref) function:
+Pages can be hidden with the [`hide`](@ref) function.
 
-```@docs
-hide
-```
-
-# List of hidden pages
+## List of hidden pages
 
 - [Hidden page 1](x.md)
 - [Hidden page 2](y.md)

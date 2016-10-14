@@ -1,4 +1,4 @@
 # Hidden 1
 
-## Header
-## Header
+## First heading
+## Second heading
