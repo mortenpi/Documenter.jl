@@ -151,7 +151,7 @@ nav.toc h1 {
 nav.toc select {
     display: block;
     height: 2em;
-    padding: 0 1em;
+    padding: 0 1.6em 0 1em;
     min-width: 7em;
     max-width: 90%;
     max-width: calc(100% - 5em);
@@ -166,6 +166,11 @@ nav.toc select {
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
+
+    background: url("arrow.svg");
+    background-size: 1.155em;
+    background-repeat: no-repeat;
+    background-position: right;
 }
 
 nav.toc select:hover {
