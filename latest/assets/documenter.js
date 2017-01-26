@@ -57,11 +57,17 @@ require(['jquery', 'highlight', 'highlight-julia'], function($, hljs) {
 
 })
 
-// update the version selector with info from the ../versions.js file
+// update the version selector with info from the siteinfo.js and ../versions.js files
 require(['jquery'], function($) {
     $(document).ready(function() {
+        var version_selector = $("#version-selector");
+
+        if (typeof DOCUMENTER_CURRENT_VERSION !== 'undefined') {
+            var option = $("<option value='" + documenterBaseURL + "'>" + DOCUMENTER_CURRENT_VERSION + "</option>");
+            version_selector.append(option);
+        }
+
         if (typeof DOC_VERSIONS !== 'undefined') {
-            var version_selector = $("#version-selector");
             var existing_versions = $('#version-selector > option');
             var existing_versions_texts = existing_versions.map(function(i,x){return x.text});
             DOC_VERSIONS.forEach(function(each) {
@@ -78,6 +84,11 @@ require(['jquery'], function($) {
                     option.disabled = false;
                 }
             });
+        }
+
+        // only show the version selector if the selector has been populated
+        if ($('#version-selector > option').length > 0) {
+            version_selector.css("visibility", "visible");
         }
     })
 

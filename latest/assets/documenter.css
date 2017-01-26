@@ -157,7 +157,6 @@ nav.toc select {
     max-width: calc(100% - 5em);
     margin: 0 auto;
     font-size: .83em;
-    background-color: white;
     border: 1px solid #c9c9c9;
     border-radius: 1em;
     text-align: center;
@@ -167,7 +166,7 @@ nav.toc select {
     -moz-appearance: none;
     -webkit-appearance: none;
 
-    background: url("arrow.svg");
+    background: white url("arrow.svg");
     background-size: 1.155em;
     background-repeat: no-repeat;
     background-position: right;
