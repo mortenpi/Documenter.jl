@@ -62,8 +62,9 @@ require(['jquery'], function($) {
     $(document).ready(function() {
         var version_selector = $("#version-selector");
 
-        if (typeof DOCUMENTER_CURRENT_VERSION !== 'undefined') {
-            var option = $("<option value='" + documenterBaseURL + "'>" + DOCUMENTER_CURRENT_VERSION + "</option>");
+        // add the current version to the selector based on siteinfo.js, but only if the selector is empty
+        if (typeof DOCUMENTER_CURRENT_VERSION !== 'undefined' && $('#version-selector > option').length == 0) {
+            var option = $("<option value='#' selected='selected'>" + DOCUMENTER_CURRENT_VERSION + "</option>");
             version_selector.append(option);
         }
 
