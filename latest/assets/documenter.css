@@ -159,6 +159,8 @@ nav.toc select {
     font-size: .83em;
     border: 1px solid #c9c9c9;
     border-radius: 1em;
+
+    /* TODO: doesn't seem to be centered on Safari */
     text-align: center;
     text-align-last: center;
 
