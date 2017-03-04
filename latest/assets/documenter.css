@@ -144,42 +144,6 @@ nav.toc .logo {
 
 nav.toc h1 {
     text-align: center;
-    margin-top: .57em;
-    margin-bottom: 0;
-}
-
-nav.toc select {
-    display: block;
-    height: 2em;
-    padding: 0 1.6em 0 1em;
-    min-width: 7em;
-    max-width: 90%;
-    max-width: calc(100% - 5em);
-    margin: 0 auto;
-    font-size: .83em;
-    border: 1px solid #c9c9c9;
-    border-radius: 1em;
-
-    /* TODO: doesn't seem to be centered on Safari */
-    text-align: center;
-    text-align-last: center;
-
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-
-    background: white url("arrow.svg");
-    background-size: 1.155em;
-    background-repeat: no-repeat;
-    background-position: right;
-}
-
-nav.toc select:hover {
-    border: 1px solid #a0a0a0;
-}
-
-nav.toc select option {
-    text-align: center;
 }
 
 nav.toc input {
@@ -187,11 +151,20 @@ nav.toc input {
     height: 2em;
     width: 90%;
     width: calc(100% - 5em);
-    margin: 1.2em auto;
+    margin: 0 auto;
     padding: 0 1em;
     border: 1px solid #c9c9c9;
     border-radius: 1em;
-    font-size: .83em;
+    font-size: smaller;
+}
+
+nav.toc select {
+    display: block;
+    height: 2em;
+    width: calc(100% - 3em);
+    margin: 5px auto;
+    font-size: smaller;
+    text-align: center;
 }
 
 nav.toc > ul * {
@@ -199,7 +172,7 @@ nav.toc > ul * {
 }
 
 nav.toc ul {
-    color: #404040;
+    color: #b3b3b3;
     padding: 0;
     list-style: none;
 }
@@ -210,7 +183,6 @@ nav.toc ul .toctext {
 }
 
 nav.toc ul a:hover {
-    color: #fcfcfc;
     background-color: #4e4a4a;
 }
 
@@ -224,6 +196,7 @@ nav.toc ul.internal a:hover {
 }
 
 nav.toc ul.internal {
+    color: gray;
     background-color: #e3e3e3;
     box-shadow: inset -14px 0px 5px -12px rgb(210,210,210);
     list-style: none;
