@@ -1,5 +1,47 @@
 using Documenter
 
+# Create a config object that has the default configuration for the document
+doc = Documenter.DocumentConfig()
+
+# Option 1. Assign to fields
+doc.format = :html
+
+# Option 2. Use functions
+# configure!( <document>, <field>, <value> )
+configure!(doc, :format, :html)
+
+# Option 3. Use a macro
+# Would probably require having functions anyway, but the macro would be the public
+# syntactic sugar.
+@conf doc.format :html
+
+# Run the build process
+# This will build and also deploy, if requested. It will also provide a command line
+# interface to Documenter, so that you could override certain configurations or have
+# Documenter do something completely different.
+#
+# Potential options:
+#
+#  - Just run doctests:
+#
+#        julia docs/make.jl doctest
+#
+#  - Deploy, even on a local machine.
+#
+#        julia docs/make.jl deploy
+#
+#  - Without a sub-command it should probably just build the docs (but not deploy).
+#
+#  - Serve docs with live re-build on changes
+#
+#        julia docs/make.jl serve
+#
+Documenter.run(ARGS, doc)
+
+
+# -----------------------------------------------------------------------------------------
+
+# Original:
 makedocs(
     modules = [Documenter],
     clean = false,
