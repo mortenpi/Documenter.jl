@@ -433,7 +433,7 @@ function deploydocs(;
                 dirname = isempty(dirname) ? temp : joinpath(temp, dirname)
                 isdir(dirname) || mkpath(dirname)
                 # Versioned docs directories.
-                latest_dir = joinpath(dirname, "latest")
+                latest_dir = joinpath(dirname, latest)
                 stable_dir = joinpath(dirname, "stable")
                 tagged_dir = joinpath(dirname, travis_tag)
 
