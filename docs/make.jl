@@ -44,8 +44,9 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/JuliaDocs/Documenter.jl.git",
+    repo = "github.com/mortenpi/Documenter.jl.git",
     target = "build",
     deps = nothing,
     make = nothing,
+    latest = readchomp(`git rev-parse --abbrev-ref HEAD`),
 )
