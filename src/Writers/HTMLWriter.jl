@@ -425,9 +425,10 @@ function generate_version_file(dir::AbstractString)
     local release_folders = []
     local tag_folders = []
     for each in readdir(dir)
-        each in ("stable", "latest")        ? push!(named_folders,   each) :
+        isdir(each) || continue
         ismatch(r"release\-\d+\.\d+", each) ? push!(release_folders, each) :
-        ismatch(Base.VERSION_REGEX, each)   ? push!(tag_folders,     each) : nothing
+        ismatch(Base.VERSION_REGEX, each)   ? push!(tag_folders,     each) :
+        push!(named_folders,   each)
     end
     open(joinpath(dir, "versions.js"), "w") do buf
         println(buf, "var DOC_VERSIONS = [")
