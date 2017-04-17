@@ -29,9 +29,11 @@ The package is tested against Julia `0.4`, `0.5`, and *current* `0.6-dev` on Lin
 
 Contributions are very welcome, as are feature requests and suggestions. The [contributing][contrib-url] page details the guidelines that should be followed when opening pull requests.
 
-Please open an [issue][issues-url] if you encounter any problems. If you have a question then feel free to ask for help in the [Gitter chat room][gitter-url].
+If you have a question then feel free to ask for help in the [Gitter chat room][gitter-url] or on the [Julia Discourse forum][discourse-url] by attaching the tag [`documenter`][discourse-tag-url] to your post. To report problems or requests, open an [issue][issues-url] on the issue tracker.
 
 [gitter-url]: https://gitter.im/juliadocs/users
+[discourse-url]: https://discourse.julialang.org/
+[discourse-tag-url]: https://discourse.julialang.org/tags/documenter
 
 [contrib-url]: https://juliadocs.github.io/Documenter.jl/latest/man/contributing/
 
