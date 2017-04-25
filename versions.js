@@ -5,6 +5,7 @@ var DOC_VERSIONS = [
   "latex-error",
   "latest",
   "hide",
+  "gh-pages",
   "fix-style",
   "bug-relcontents",
   ".git",
