@@ -473,8 +473,6 @@ function deploydocs(;
                             Utilities.log("assuming $branch doesn't exist yet; creating a new one.")
                             success(`git checkout --orphan $branch`) ||
                                 error("could not create new empty branch.")
-                            success(`git rm -rf .`) ||
-                                error("could not clean up new empty branch working tree.")
                         end
 
                         # Copy docs to `latest`, or `stable`, `<release>`, and `<version>` directories.
