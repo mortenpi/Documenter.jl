@@ -7,6 +7,7 @@ var DOC_VERSIONS = [
   "hide",
   "gh-pages",
   "fix-style",
+  "bundle-highlightjs-deploy",
   "bug-relcontents",
   ".git",
 ];
