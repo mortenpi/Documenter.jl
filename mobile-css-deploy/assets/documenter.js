@@ -9,6 +9,7 @@ requirejs.config({
     paths: {
         'jquery': 'https://code.jquery.com/jquery-3.1.0.js?',
         'jqueryui': 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min',
+        'headroom': 'https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.3/headroom.min',
         'mathjax': 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML',
         'highlight': 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min',
         'highlight-julia': 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/languages/julia.min',
@@ -96,19 +97,29 @@ require(['jquery'], function($) {
 })
 
 // mobile
-require(['jquery'], function($) {
+require(['jquery', 'headroom'], function($, Headroom) {
     $(document).ready(function() {
         var navtoc = $("nav.toc");
-        var navtoc_current_top = $('nav.toc li.current').offset().top;
-        $("nav.toc li.current a.toctext").click(function(ev) {
+        $("nav.toc li.current a.toctext").click(function() {
             navtoc.toggleClass('show');
         });
-        $("div.topbar ul.float-right a.btn").click(function() {
+        $("div#topbar a.btn").click(function(ev) {
             navtoc.toggleClass('show');
             if (navtoc.hasClass('show')) {
-                navtoc.animate({scrollTop: navtoc_current_top}, 0);
+                var title = $("div#topbar span").text();
+                $("nav.toc ul li a:contains('" + title + "')").focus();
+            }
+            ev.preventDefault();
+        });
+        $("article#docs").bind('click', function() {
+            if (navtoc.hasClass('show')) {
+                navtoc.toggleClass('show');
             }
         });
+        if ($("div#topbar").css('display') == 'block') {
+            var headroom = new Headroom(document.querySelector("div#topbar"), {"tolerance": {"down": 10}});
+            headroom.init();
+        }
     })
 
 })
