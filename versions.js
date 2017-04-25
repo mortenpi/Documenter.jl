@@ -6,6 +6,7 @@ var DOC_VERSIONS = [
   "latest",
   "hide",
   "gh-pages",
+  "fork-debug-build",
   "fix-style",
   "bundle-highlightjs-deploy",
   "bug-relcontents",
