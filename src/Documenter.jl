@@ -473,6 +473,8 @@ function deploydocs(;
                             Utilities.log("assuming $branch doesn't exist yet; creating a new one.")
                             success(`git checkout --orphan $branch`) ||
                                 error("could not create new empty branch.")
+                            success(`git commit --allow-empty -m "Initial empty commit for docs"`) ||
+                                error("could not commit to new branch $branch")
                         end
 
                         # Copy docs to `latest`, or `stable`, `<release>`, and `<version>` directories.
