@@ -1,4 +1,5 @@
 var DOC_VERSIONS = [
+  "monospace-size",
   "mobile-css-deploy",
   "mh-fix-nav-large",
   "mh-fix-nav",
