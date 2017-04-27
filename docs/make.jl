@@ -49,4 +49,5 @@ deploydocs(
     deps = nothing,
     make = nothing,
     latest = readchomp(`git rev-parse --abbrev-ref HEAD`),
+    branch = "gh-pages-test",
 )
