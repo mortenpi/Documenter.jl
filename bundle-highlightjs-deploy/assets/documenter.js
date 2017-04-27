@@ -10,7 +10,7 @@ requirejs.config({
         'jquery': 'https://code.jquery.com/jquery-3.1.0.js?',
         'jqueryui': 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min',
         'mathjax': 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML',
-        'highlight': 'highlightjs/highlight.pack',
+        'highlight': 'highlightjs/highlight',
     },
     shim: {
         'mathjax' : {
