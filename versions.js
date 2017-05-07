@@ -12,4 +12,5 @@ var DOC_VERSIONS = [
   "bundle-highlightjs-deploy",
   "bug-relcontents",
   ".git",
+  "release-0.10-deploy",
 ];
