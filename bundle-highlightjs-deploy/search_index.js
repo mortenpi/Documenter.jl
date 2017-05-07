@@ -49,30 +49,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "highlight-examples.html#",
-    "page": "DEBUG",
-    "title": "DEBUG",
-    "category": "page",
-    "text": ""
-},
-
-{
-    "location": "highlight-examples.html#highlighting-examples-1",
-    "page": "DEBUG",
-    "title": "highlighting examples",
-    "category": "section",
-    "text": "julia> using Stuff\nPkg.add(\"...\")julia> function foo(x)\n           x + 1\n       end\nfoo (generic function with 1 method)julia> [x^2 for x in linspace(1:40)]\n[2,3,45]# Assign the value 10 to the variable x\njulia> x = 10\n10\n\n# Doing math with x's value\njulia> x + 1\n11\n\n# Reassign x's value\njulia> x = 1 + 1\n2\n\n# You can assign values of other types, like strings of text\njulia> x = \"Hello World!\"\n\"Hello World!\"julia> (typemin(Int32), typemax(Int32))\n(-2147483648, 2147483647)\n\njulia> println(\"$(lpad(T,7)): [$(typemin(T)),$(typemax(T))]\")\njulia> for T in [Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt128]\n           println(\"$(lpad(T,7)): [$(typemin(T)),$(typemax(T))]\")\n       end\n   Int8: [-128,127]\n  Int16: [-32768,32767]\n  Int32: [-2147483648,2147483647]\n  Int64: [-9223372036854775808,9223372036854775807]\n Int128: [-170141183460469231731687303715884105728,170141183460469231731687303715884105727]\n  UInt8: [0,255]\n UInt16: [0,65535]\n UInt32: [0,4294967295]\n UInt64: [0,18446744073709551615]\nUInt128: [0,340282366920938463463374607431768211455]"
-},
-
-{
-    "location": "highlight-examples.html#Doctests-1",
-    "page": "DEBUG",
-    "title": "Doctests",
-    "category": "section",
-    "text": "julia> function foo(x) x + 1 end\nfoo (generic function with 1 method)julia> function foo(x)\n           x + 1\n       end\nfoo (generic function with 1 method)"
-},
-
-{
     "location": "man/guide.html#",
     "page": "Guide",
     "title": "Guide",
@@ -1037,7 +1013,7 @@ var documenterSearchIndex = {"docs": [
     "page": "DocSystem",
     "title": "Documenter.DocSystem.getdocs",
     "category": "Function",
-    "text": "getdocs(object)\ngetdocs(object, typesig; kws...)\n\n\nAccepts objects of any type and tries to convert them to Bindings before searching for the Binding in the docsystem.\n\nNote that when conversion fails this method returns an empty Vector{DocStr}.\n\n\n\n"
+    "text": "getdocs(object, typesig; kws...)\ngetdocs(object)\n\n\nAccepts objects of any type and tries to convert them to Bindings before searching for the Binding in the docsystem.\n\nNote that when conversion fails this method returns an empty Vector{DocStr}.\n\n\n\n"
 },
 
 {
@@ -1045,7 +1021,7 @@ var documenterSearchIndex = {"docs": [
     "page": "DocSystem",
     "title": "Documenter.DocSystem.getdocs",
     "category": "Function",
-    "text": "getdocs(binding)\ngetdocs(binding, typesig; aliases, compare, modules)\n\n\nFind all DocStr objects that match the provided arguments:\n\nbinding: the name of the object.\ntypesig: the signature of the object. Default: Union{}.\ncompare: how to compare signatures? Exact (==) or subtypes (<:). Default: <:.\nmodules: which modules to search through. Default: all modules.\naliases: check aliases of binding when nothing is found. Default: true.\n\nReturns a Vector{DocStr} ordered by definition order in 0.5 and by type_morespecific in 0.4.\n\n\n\n"
+    "text": "getdocs(binding, typesig; aliases, compare, modules)\ngetdocs(binding)\n\n\nFind all DocStr objects that match the provided arguments:\n\nbinding: the name of the object.\ntypesig: the signature of the object. Default: Union{}.\ncompare: how to compare signatures? Exact (==) or subtypes (<:). Default: <:.\nmodules: which modules to search through. Default: all modules.\naliases: check aliases of binding when nothing is found. Default: true.\n\nReturns a Vector{DocStr} ordered by definition order in 0.5 and by type_morespecific in 0.4.\n\n\n\n"
 },
 
 {
