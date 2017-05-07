@@ -10,6 +10,7 @@ makedocs(
     linkcheck = !("skiplinks" in ARGS),
     pages = Any[ # Compat: `Any` for 0.4 compat
         "Home" => "index.md",
+        "DEBUG" => "highlight-examples.md",
         "Manual" => Any[
             "Guide" => "man/guide.md",
             "man/examples.md",
