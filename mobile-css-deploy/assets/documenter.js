@@ -103,23 +103,25 @@ require(['jquery', 'headroom'], function($, Headroom) {
         $("nav.toc li.current a.toctext").click(function() {
             navtoc.toggleClass('show');
         });
-        $("div#topbar a.btn").click(function(ev) {
+        $("article > header div#topbar a.fa-bars").click(function(ev) {
+            ev.preventDefault();
             navtoc.toggleClass('show');
             if (navtoc.hasClass('show')) {
-                var title = $("div#topbar span").text();
+                var title = $("article > header div#topbar span").text();
                 $("nav.toc ul li a:contains('" + title + "')").focus();
             }
-            ev.preventDefault();
         });
-        $("article#docs").bind('click', function() {
+        $("article#docs").bind('click', function(ev) {
+            if ($(ev.target).is('div#topbar a.fa-bars')) {
+                return;
+            }
             if (navtoc.hasClass('show')) {
-                navtoc.toggleClass('show');
+                navtoc.removeClass('show');
             }
         });
-        if ($("div#topbar").css('display') == 'block') {
-            var headroom = new Headroom(document.querySelector("div#topbar"), {"tolerance": {"down": 10}});
+        if ($("article > header div#topbar").css('display') == 'block') {
+            var headroom = new Headroom(document.querySelector("article > header div#topbar"), {"tolerance": {"up": 10, "down": 10}});
             headroom.init();
         }
     })
-
 })
