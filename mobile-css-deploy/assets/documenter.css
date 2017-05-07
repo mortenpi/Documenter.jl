@@ -521,8 +521,8 @@ article section.docstring a.source-link {
     }
 
     article table {
-        table-layout: fixed;
-        width: 99%;
+        overflow-x: auto;
+        display: block;
     }
 
     article div.MathJax_Display {
