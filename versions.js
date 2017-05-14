@@ -1,4 +1,5 @@
 var DOC_VERSIONS = [
+  "pretty-urls-deploy",
   "monospace-size",
   "mobile-css-deploy",
   "mh-fix-nav-large",
