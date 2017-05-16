@@ -2,7 +2,7 @@ language: julia
 
 os:
   - linux
-  - osx
+#  - osx
 
 julia:
   - 0.6
@@ -16,4 +16,13 @@ git:
   depth: 99999
 
 after_success:
-  - julia -e 'cd(Pkg.dir("Documenter", "test")); include("coverage.jl")'
+  - julia --color=yes test/coverage.jl
+
+jobs:
+  include:
+    - stage: "Deploy docs"
+      julia: nightly
+      os: linux
+      script: julia --color=yes -e 'Pkg.clone(pwd())'
+        && julia --color=yes -e 'Pkg.build("Documenter")'
+        && julia --color=yes docs/make.jl deploy

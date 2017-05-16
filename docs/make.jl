@@ -49,7 +49,7 @@ makedocs(
     html_canonical = "https://juliadocs.github.io/Documenter.jl/stable/",
 )
 
-deploydocs(
+"deploy" in ARGS && deploydocs(
     repo = "github.com/JuliaDocs/Documenter.jl.git",
     target = "build",
     deps = nothing,
