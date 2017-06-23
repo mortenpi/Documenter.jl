@@ -23,7 +23,8 @@ extra_javascript:
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
   - assets/mathjaxhelper.js
 
-docs_dir: 'build'
+docs_dir: 'builds/markdown'
+site_dir: 'builds/markdown_mkdocs'
 
 pages:
 - Home: index.md
@@ -32,3 +33,9 @@ pages:
 - Library:
   - Functions: lib/functions.md
   - AutoDocs: lib/autodocs.md
+- 'hidden_toplevel.md'
+- Hidden:
+    - 'hidden/index.md'
+    - Page X: 'hidden/x.md'
+    - 'hidden/y.md'
+    - 'hidden/z.md'

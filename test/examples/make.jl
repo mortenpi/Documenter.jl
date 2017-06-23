@@ -132,7 +132,7 @@ examples_html_doc = makedocs(
         "Manual" => [
             "man/tutorial.md",
         ],
-        hide("hidden.md"),
+        hide("hidden_toplevel.md"),
         "Library" => [
             "lib/functions.md",
             "lib/autodocs.md",
@@ -162,7 +162,7 @@ examples_html_doc = makedocs(
         "Manual" => [
             "man/tutorial.md",
         ],
-        hide("hidden.md"),
+        hide("hidden_toplevel.md"),
         "Library" => [
             "lib/functions.md",
             "lib/autodocs.md",
