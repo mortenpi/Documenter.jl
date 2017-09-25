@@ -16,4 +16,4 @@ git:
   depth: 99999
 
 after_success:
-  - julia -e 'cd(Pkg.dir("Documenter", "test")); include("coverage.jl")'
+  - echo "woot" && julia -e 'cd(Pkg.dir("Documenter", "test")); include("coverage.jl")'
