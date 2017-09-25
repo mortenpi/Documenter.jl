@@ -15,5 +15,8 @@ notifications:
 git:
   depth: 99999
 
+before_install:
+  - echo "woot" && echo "boot"
+
 after_success:
   - echo "woot" && julia -e 'cd(Pkg.dir("Documenter", "test")); include("coverage.jl")'
