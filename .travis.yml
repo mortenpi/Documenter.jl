@@ -16,7 +16,7 @@ git:
   depth: 99999
 
 after_success:
-  - julia --color=yes - julia ${TRAVIS_BUILD_DIR}/test/coverage.jl
+  - julia --color=yes ${TRAVIS_BUILD_DIR}/test/coverage.jl
 
 jobs:
   include:
