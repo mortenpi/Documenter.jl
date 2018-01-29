@@ -16,8 +16,7 @@ git:
   depth: 99999
 
 after_success:
-  #- julia --color=yes test/coverage.jl
-  - julia -e 'cd(Pkg.dir("Documenter", "test")); include("coverage.jl")'
+  - julia --color=yes - julia ${TRAVIS_BUILD_DIR}/test/coverage.jl
 
 jobs:
   include:
