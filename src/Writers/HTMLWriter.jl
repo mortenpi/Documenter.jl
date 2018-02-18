@@ -951,6 +951,11 @@ end
 
 mdconvert(html::Documents.RawHTML, parent; kwargs...) = Tag(Symbol("#RAW#"))(html.code)
 
+function mdconvert(obj::Any, parent; kawrgs...)
+    Utilities.warn("mdconvert called on $(typeof(obj))")
+    DOM.Node(string(obj))
+end
+
 
 # fixlinks!
 # ------------------------------------------------------------------------------

@@ -93,4 +93,9 @@ function mdflatten(io, a::Admonition, parent)
     mdflatten(io, a.content, a)
 end
 
+function mdflatten(io, obj::Any, parent)
+    Utilities.warn("mdflatten called on $(typeof(obj))")
+    print(io, string(obj))
+end
+
 end
