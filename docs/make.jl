@@ -41,6 +41,11 @@ makedocs(
                 "lib/internals/walkers.md",
                 "lib/internals/writers.md",
             ])
+        ],
+        "Internals" => Any[
+            "internal/internals.md",
+            "internal/contributing.md",
+            "internal/html-style.md",
         ]
     ],
     # Use clean URLs, unless built as a "local" build
