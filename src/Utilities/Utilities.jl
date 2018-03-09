@@ -385,12 +385,18 @@ function in_cygwin()
     end
 end
 
+function repo_root(file; dbdir=".git")
+    parent_dir, parent_dir_last = dirname(abspath(file)), ""
+    while parent_dir !== parent_dir_last
+        isdir(joinpath(parent_dir, dbdir)) && return parent_dir
+        parent_dir, parent_dir_last = dirname(parent_dir), parent_dir
+    end
+    return nothing
+end
+
 function relpath_from_repo_root(file)
     cd(dirname(file)) do
-        root = readchomp(`git rev-parse --show-toplevel`)
-        if in_cygwin()
-            root = readchomp(`cygpath -m "$root"`)
-        end
+        root = repo_root(file)
         startswith(file, root) ? relpath(file, root) : nothing
     end
 end
@@ -405,14 +411,14 @@ function url(repo, file; commit=nothing)
     file = realpath(abspath(file))
     remote = getremote(dirname(file))
     isempty(repo) && (repo = "https://github.com/$remote/blob/{commit}{path}")
-    # Replace any backslashes in links, if building the docs on Windows
-    file = replace(file, '\\' => '/')
     path = relpath_from_repo_root(file)
     if path === nothing
         nothing
     else
         repo = replace(repo, "{commit}" => commit === nothing ? repo_commit(file) : commit)
-        repo = replace(repo, "{path}" => string("/", path))
+        # Note: replacing any backslashes in path (e.g. if building the docs on Windows)
+        repo = replace(repo, "{path}" => string("/", replace(path, '\\' => '/')))
+        repo = replace(repo, "{line}" => "")
         repo
     end
 end
@@ -428,14 +434,13 @@ function url(remote, repo, mod, file, linerange)
         file = realpath(abspath(file))
     end
 
-    # Replace any backslashes in links, if building the docs on Windows
-    file = replace(file, '\\' => '/')
     # Format the line range.
     line = format_line(linerange, LineRangeFormatting(repo_host_from_url(repo)))
     # Macro-generated methods such as those produced by `@deprecate` list their file as
     # `deprecated.jl` since that is where the macro is defined. Use that to help
     # determine the correct URL.
     if inbase(mod) || !isabspath(file)
+        file = replace(file, '\\' => '/')
         base = "https://github.com/JuliaLang/julia/blob"
         dest = "base/$file#$line"
         if isempty(Base.GIT_VERSION_INFO.commit)
@@ -453,7 +458,8 @@ function url(remote, repo, mod, file, linerange)
             nothing
         else
             repo = replace(repo, "{commit}" => repo_commit(file))
-            repo = replace(repo, "{path}" => string("/", path))
+            # Note: replacing any backslashes in path (e.g. if building the docs on Windows)
+            repo = replace(repo, "{path}" => string("/", replace(path, '\\' => '/')))
             repo = replace(repo, "{line}" => line)
             repo
         end
