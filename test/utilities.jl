@@ -110,6 +110,19 @@ end
         @test Documenter.Utilities.format_line(line_range, formatting) == expected_string
     end
 
+    # URL building
+    filepath = string(first(methods(Documenter.Utilities.url)).file)
+    @test endswith(filepath, "Documenter/src/Utilities/Utilities.jl")
+    commit = Documenter.Utilities.repo_commit(filepath)
+    @test Documenter.Utilities.url("//blob/{commit}{path}#L{line}", filepath) ==
+        "//blob/$(commit)/src/Utilities/Utilities.jl#L"
+    @test Documenter.Utilities.url("//blob/{commit}{path}{#L|line}", filepath) ==
+        "//blob/$(commit)/src/Utilities/Utilities.jl"
+
+    #@show Documenter.Utilities.url(nothing, "//blob/{commit}{path}{#L|line}", Documenter.Utilities, filepath, 10)
+    @test Documenter.Utilities.url(nothing, "//blob/{commit}{path}{#|line}", Documenter.Utilities, filepath, 10:20) ==
+        "//blob/$(commit)/src/Utilities/Utilities.jl#L10-L20"
+
     import Documenter.Documents: Document, Page, Globals
     let page = Page("source", "build", [], IdDict(), Globals()), doc = Document()
         code = """

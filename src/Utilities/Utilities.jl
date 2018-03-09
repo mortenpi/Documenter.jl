@@ -401,6 +401,11 @@ function repo_commit(file)
     end
 end
 
+# URLCHARS_REGEX is the character class for all valid characters in a URL.
+# Source: https://stackoverflow.com/questions/1856785/characters-allowed-in-a-url
+const URLCHARS_REGEXCLASS = "[A-Za-z0-9_.~!*'();:@&=+\$,\\/?#[\\]%-]"
+const LINES_REGEX = Regex("{($(URLCHARS_REGEXCLASS)+\\|)?line(\\|$(URLCHARS_REGEXCLASS)+)?}")
+
 function url(repo, file; commit=nothing)
     file = realpath(abspath(file))
     remote = getremote(dirname(file))
@@ -413,6 +418,13 @@ function url(repo, file; commit=nothing)
     else
         repo = replace(repo, "{commit}" => commit === nothing ? repo_commit(file) : commit)
         repo = replace(repo, "{path}" => string("/", path))
+
+        # TODO
+        m = match(LINES_REGEX, repo)
+        if m !== nothing
+            repo = replace(repo, m.match => "")
+        end
+
         repo
     end
 end
@@ -454,7 +466,15 @@ function url(remote, repo, mod, file, linerange)
         else
             repo = replace(repo, "{commit}" => repo_commit(file))
             repo = replace(repo, "{path}" => string("/", path))
-            repo = replace(repo, "{line}" => line)
+
+            # Match e.g. {#L|line}
+            m = match(LINES_REGEX, repo)
+            if m !== nothing
+                m1s = (m.captures[1] === nothing) ? "" : rstrip(m.captures[1], '|')
+                m2s = (m.captures[2] === nothing) ? "" : rstrip(m.captures[2], '|')
+                repo = replace(repo, m.match => string(m1s, line, m2s))
+            end
+
             repo
         end
     end
